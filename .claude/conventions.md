@@ -1,3 +1,22 @@
+# Project Overview
+
+**a-rol** is a church management system designed to help churches manage their members, events, finances, and administrative tasks.
+
+## Core Features
+- Member management and profiles
+- Event scheduling and attendance tracking
+- Financial management (tithes, offerings, expenses)
+- Role-based access control (RBAC)
+- Dashboard and reporting
+
+## Target Users
+- Church administrators
+- Pastors and ministry leaders
+- Church staff
+- Church members (limited access)
+
+---
+
 # Git Workflow Conventions
 
 ## Branch Structure
@@ -27,6 +46,6 @@
 - Commit migrations immediately after creation
 
 ## Merging to Main
-- Only merge `dev` ’ `main` when features are stable and tested
+- Only merge `dev` ï¿½ `main` when features are stable and tested
 - Use PRs for visibility (via `gh` CLI)
 - Squash commits if needed for clean history

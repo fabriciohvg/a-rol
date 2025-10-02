@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname !== '/auth/confirm'
   ) {
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
 

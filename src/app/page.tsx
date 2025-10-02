@@ -14,7 +14,7 @@ export default async function Home() {
         {error || !data?.claims ? (
           <>
             <p>User: unauthenticated</p>
-            <Button asChild>
+            <Button size="sm" asChild>
               <Link href="/auth/login">Sign In</Link>
             </Button>
           </>

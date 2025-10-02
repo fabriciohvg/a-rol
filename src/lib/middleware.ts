@@ -38,12 +38,23 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
 
+  // Redirect authenticated users away from auth pages (except confirm callback)
+  if (
+    user &&
+    request.nextUrl.pathname.startsWith('/auth') &&
+    request.nextUrl.pathname !== '/auth/confirm'
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    return NextResponse.redirect(url)
+  }
+
+  // Redirect unauthenticated users to login (except public routes)
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/auth') &&
     request.nextUrl.pathname !== '/'
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)

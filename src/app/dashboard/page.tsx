@@ -1,31 +1,23 @@
-import { redirect } from 'next/navigation'
-
-import { LogoutButton } from '@/components/logout-button'
-import { ProfileForm } from '@/components/profile-form'
 import { createClient } from '@/lib/server'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  const { data, error } = await supabase.auth.getClaims()
-  if (error || !data?.claims) {
-    redirect('/auth/login')
-  }
-
-  const userId = data.claims.sub
+  const { data } = await supabase.auth.getClaims()
 
   return (
-    <div className="min-h-svh w-full p-6 md:p-10">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">{data.claims.email}</p>
-          </div>
-          <LogoutButton />
-        </div>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome back, {data?.claims?.email}</p>
+      </div>
 
-        <ProfileForm userId={userId} />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* Dashboard overview content will go here */}
+        <div className="rounded-lg border bg-card p-6">
+          <h3 className="font-semibold mb-2">Quick Stats</h3>
+          <p className="text-sm text-muted-foreground">Your activity overview</p>
+        </div>
       </div>
     </div>
   )

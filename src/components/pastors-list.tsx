@@ -84,7 +84,7 @@ export function PastorsList({ onEdit, onNew }: PastorsListProps) {
       {pastors.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center text-muted-foreground">
-            No pastors found. Click "New Pastor" to add one.
+            No pastors found. Click &quot;New Pastor&quot; to add one.
           </CardContent>
         </Card>
       ) : (

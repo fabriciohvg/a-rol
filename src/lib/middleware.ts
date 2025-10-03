@@ -39,6 +39,10 @@ export async function updateSession(request: NextRequest) {
 
   // If there's an error getting claims, clear the session
   if (error) {
+    // Suppress common refresh token errors in console (they're handled gracefully)
+    if (error.code !== 'refresh_token_not_found') {
+      console.error('Auth error:', error)
+    }
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     const response = NextResponse.redirect(url)

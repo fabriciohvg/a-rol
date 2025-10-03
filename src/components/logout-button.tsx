@@ -9,8 +9,14 @@ export function LogoutButton() {
 
   const logout = async () => {
     const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/auth/login");
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Logout error:', error);
+    }
+
+    // Force hard navigation to ensure cookies are cleared and middleware runs
+    window.location.href = "/auth/login";
   };
 
   return (

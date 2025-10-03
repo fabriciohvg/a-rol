@@ -46,6 +46,6 @@
 - Commit migrations immediately after creation
 
 ## Merging to Main
-- Only merge `dev` � `main` when features are stable and tested
+- Only merge `dev` → `main` when features are stable and tested
 - Use PRs for visibility (via `gh` CLI)
 - Squash commits if needed for clean history

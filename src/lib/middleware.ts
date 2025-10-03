@@ -43,13 +43,22 @@ export async function updateSession(request: NextRequest) {
     if (error.code !== 'refresh_token_not_found') {
       console.error('Auth error:', error)
     }
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
-    const response = NextResponse.redirect(url)
-    // Clear auth cookies
-    response.cookies.delete('sb-access-token')
-    response.cookies.delete('sb-refresh-token')
-    return response
+
+    // Only redirect if not already on auth pages (prevent redirect loop)
+    if (!request.nextUrl.pathname.startsWith('/auth') && request.nextUrl.pathname !== '/') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/login'
+      const response = NextResponse.redirect(url)
+      // Clear auth cookies
+      response.cookies.delete('sb-access-token')
+      response.cookies.delete('sb-refresh-token')
+      return response
+    }
+
+    // Already on auth page or home, just clear cookies and continue
+    supabaseResponse.cookies.delete('sb-access-token')
+    supabaseResponse.cookies.delete('sb-refresh-token')
+    return supabaseResponse
   }
 
   const user = data?.claims

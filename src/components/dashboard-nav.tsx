@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, User, Settings, LogOut, Users } from 'lucide-react'
+import { Home, User, Settings, LogOut, Users, Church } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/client'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,11 @@ const navItems = [
     title: 'Pastors',
     href: '/dashboard/pastors',
     icon: Users,
+  },
+  {
+    title: 'Churches',
+    href: '/dashboard/churches',
+    icon: Church,
   },
   {
     title: 'Profile',

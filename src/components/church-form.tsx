@@ -132,6 +132,11 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
     setLoading(true)
 
     try {
+      // Client-side validation
+      if (!formData.lead_pastor_id) {
+        throw new Error('Please select a lead pastor')
+      }
+
       // Upload photo if changed
       const photoPath = await uploadPhoto()
 
@@ -139,6 +144,9 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
         ...formData,
         photo_url: photoPath,
         assistant_pastor_ids: selectedAssistantPastors,
+        // Ensure empty strings become null for optional fields
+        website: formData.website?.trim() || null,
+        notes: formData.notes?.trim() || null,
       } as ChurchInsert
 
       if (church) {
@@ -159,8 +167,11 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
       }
 
       onSuccess?.()
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+    } catch (error: any) {
+      console.error('Church form error:', error)
+      // Show detailed error message from Supabase
+      const errorMessage = error?.message || error?.details || error?.hint || 'An error occurred'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -276,9 +287,12 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
                   <Input
                     id="state"
                     value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
                     placeholder="SP"
                     maxLength={2}
+                    minLength={2}
+                    pattern="[A-Z]{2}"
+                    title="Two uppercase letters (e.g., SP, RJ)"
                     required
                     disabled={loading}
                   />
@@ -302,6 +316,8 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
                     value={formData.postal_code}
                     onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
                     placeholder="12345-678"
+                    pattern="\d{5}-\d{3}"
+                    title="Format: 12345-678"
                     required
                     disabled={loading}
                   />
@@ -361,6 +377,8 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
                     value={formData.cnpj}
                     onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
                     placeholder="12.345.678/0001-00"
+                    pattern="\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}"
+                    title="Format: 12.345.678/0001-00"
                     required
                     disabled={loading}
                   />

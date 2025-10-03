@@ -22,13 +22,14 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
   const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(church?.photo_url || null)
   const [pastors, setPastors] = useState<Pastor[]>([])
+  const [churches, setChurches] = useState<Church[]>([])
   const [selectedAssistantPastors, setSelectedAssistantPastors] = useState<string[]>(
     church?.assistant_pastor_ids || []
   )
 
   // Form state
   const [formData, setFormData] = useState<Partial<ChurchInsert>>({
-    type: 'Church',
+    type: church?.type || 'Church',
     name: church?.name || '',
     address: church?.address || '',
     neighborhood: church?.neighborhood || '',
@@ -46,23 +47,35 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
     presbytery: church?.presbytery || 'PANA',
     notes: church?.notes || '',
     photo_url: church?.photo_url || null,
+    parent_church_id: church?.parent_church_id || null,
   })
 
   const supabase = createClient()
 
-  // Load pastors for select fields
+  // Load pastors and churches for select fields
   useEffect(() => {
-    async function loadPastors() {
-      const { data, error } = await supabase
+    async function loadData() {
+      const { data: pastorsData, error: pastorsError } = await supabase
         .from('pastors')
         .select('*')
         .order('name', { ascending: true })
 
-      if (!error && data) {
-        setPastors(data)
+      if (!pastorsError && pastorsData) {
+        setPastors(pastorsData)
+      }
+
+      // Load independent churches (for parent church selection)
+      const { data: churchesData, error: churchesError } = await supabase
+        .from('churches')
+        .select('*')
+        .eq('type', 'Church')
+        .order('name', { ascending: true })
+
+      if (!churchesError && churchesData) {
+        setChurches(churchesData)
       }
     }
-    loadPastors()
+    loadData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -136,6 +149,11 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
       // Client-side validation
       if (!formData.lead_pastor_id) {
         throw new Error('Please select a lead pastor')
+      }
+
+      // Validate parent church for congregations
+      if (formData.type !== 'Church' && !formData.parent_church_id) {
+        throw new Error('Please select a mother church for this congregation')
       }
 
       // Upload photo if changed
@@ -220,17 +238,28 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
             {/* Basic Information */}
             <div className="grid md:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="type">Type</Label>
+                <Label htmlFor="type">Type *</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value as 'Church' })}
+                  onValueChange={(value) => {
+                    const newType = value as Church['type']
+                    setFormData({
+                      ...formData,
+                      type: newType,
+                      // Clear parent_church_id if changing to 'Church'
+                      parent_church_id: newType === 'Church' ? null : formData.parent_church_id
+                    })
+                  }}
                   disabled={loading}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Church">Church</SelectItem>
+                    <SelectItem value="Church">Church (Independent)</SelectItem>
+                    <SelectItem value="Congregation">Congregation</SelectItem>
+                    <SelectItem value="Presbyterial Congregation">Presbyterial Congregation</SelectItem>
+                    <SelectItem value="Preaching Point">Preaching Point</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -245,6 +274,29 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
                   disabled={loading}
                 />
               </div>
+
+              {/* Show Parent Church field only for congregations */}
+              {formData.type !== 'Church' && (
+                <div className="grid gap-2 md:col-span-2">
+                  <Label htmlFor="parent_church_id">Mother Church *</Label>
+                  <Select
+                    value={formData.parent_church_id || ''}
+                    onValueChange={(value) => setFormData({ ...formData, parent_church_id: value })}
+                    disabled={loading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select mother church" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {churches.map((church) => (
+                        <SelectItem key={church.id} value={church.id}>
+                          {church.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
 
             {/* Address Fields */}

@@ -18,12 +18,18 @@ interface RelationshipWithMember extends MemberFamilyRelationship {
   related_member?: { name: string; photo_url: string | null }
 }
 
+interface MemberSummary {
+  id: string
+  name: string
+  photo_url: string | null
+}
+
 export function MemberFamilyRelationships({ memberId, memberName }: MemberFamilyRelationshipsProps) {
   const [relationships, setRelationships] = useState<RelationshipWithMember[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [members, setMembers] = useState<Member[]>([])
+  const [members, setMembers] = useState<MemberSummary[]>([])
 
   // New relationship form state
   const [newRelatedMemberId, setNewRelatedMemberId] = useState('')
@@ -113,9 +119,10 @@ export function MemberFamilyRelationships({ memberId, memberName }: MemberFamily
 
       // Reload relationships
       await loadRelationships()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error adding relationship:', error)
-      setError(error?.message || 'Failed to add relationship')
+      const err = error as { message?: string }
+      setError(err?.message || 'Failed to add relationship')
     } finally {
       setAdding(false)
     }

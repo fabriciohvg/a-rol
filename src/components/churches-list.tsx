@@ -51,7 +51,7 @@ export function ChurchesList({ onEdit, onNew }: ChurchesListProps) {
         ...church,
         lead_pastor: pastorsMap.get(church.lead_pastor_id),
         assistant_pastors: church.assistant_pastor_ids
-          .map(id => pastorsMap.get(id))
+          .map((id: string) => pastorsMap.get(id))
           .filter(Boolean) as { name: string }[]
       }))
 
@@ -110,7 +110,7 @@ export function ChurchesList({ onEdit, onNew }: ChurchesListProps) {
       {churches.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center text-muted-foreground">
-            No churches found. Click "New Church" to add one.
+            No churches found. Click &quot;New Church&quot; to add one.
           </CardContent>
         </Card>
       ) : (

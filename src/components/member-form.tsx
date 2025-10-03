@@ -227,9 +227,10 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
       }
 
       onSuccess?.()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Member form error:', error)
-      const errorMessage = error?.message || error?.details || error?.hint || 'An error occurred'
+      const err = error as { message?: string; details?: string; hint?: string }
+      const errorMessage = err?.message || err?.details || err?.hint || 'An error occurred'
       setError(errorMessage)
     } finally {
       setLoading(false)
@@ -563,7 +564,7 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
                       <SelectItem value="High school">High school</SelectItem>
                       <SelectItem value="Vocational/Technical">Vocational/Technical</SelectItem>
                       <SelectItem value="College/University">College/University</SelectItem>
-                      <SelectItem value="Master's">Master's</SelectItem>
+                      <SelectItem value="Master's">Master&apos;s</SelectItem>
                       <SelectItem value="Doctorate">Doctorate</SelectItem>
                       <SelectItem value="Post-doc">Post-doc</SelectItem>
                       <SelectItem value="Illiterate">Illiterate</SelectItem>
@@ -584,7 +585,7 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="mother_name">Mother's Name</Label>
+                  <Label htmlFor="mother_name">Mother&apos;s Name</Label>
                   <Input
                     id="mother_name"
                     value={formData.mother_name || ''}
@@ -594,7 +595,7 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="father_name">Father's Name</Label>
+                  <Label htmlFor="father_name">Father&apos;s Name</Label>
                   <Input
                     id="father_name"
                     value={formData.father_name || ''}
@@ -844,7 +845,7 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
                       <SelectItem value="Profession of faith">Profession of faith</SelectItem>
                       <SelectItem value="Deceased">Deceased</SelectItem>
                       <SelectItem value="Majority/coming of age">Majority/coming of age</SelectItem>
-                      <SelectItem value="Guardians' request">Guardians' request</SelectItem>
+                      <SelectItem value="Guardians' request">Guardians&apos; request</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

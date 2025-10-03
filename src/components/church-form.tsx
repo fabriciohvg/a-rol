@@ -167,10 +167,11 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
       }
 
       onSuccess?.()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Church form error:', error)
       // Show detailed error message from Supabase
-      const errorMessage = error?.message || error?.details || error?.hint || 'An error occurred'
+      const err = error as { message?: string; details?: string; hint?: string }
+      const errorMessage = err?.message || err?.details || err?.hint || 'An error occurred'
       setError(errorMessage)
     } finally {
       setLoading(false)

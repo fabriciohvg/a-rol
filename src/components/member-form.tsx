@@ -107,6 +107,7 @@ export function MemberForm({ member, onSuccess, onCancel }: MemberFormProps) {
       }
     }
     loadChurches()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {

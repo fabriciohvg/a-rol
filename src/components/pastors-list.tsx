@@ -56,6 +56,7 @@ export function PastorsList({ onEdit, onNew }: PastorsListProps) {
 
   useEffect(() => {
     loadPastors()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (loading) {

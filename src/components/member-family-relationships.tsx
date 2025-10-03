@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plus, Trash2, Users } from 'lucide-react'
-import type { Member, MemberFamilyRelationship, FamilyRelationshipType } from '@/types/database'
+import type { MemberFamilyRelationship, FamilyRelationshipType } from '@/types/database'
 
 interface MemberFamilyRelationshipsProps {
   memberId: string
@@ -148,6 +148,7 @@ export function MemberFamilyRelationships({ memberId, memberName }: MemberFamily
   useEffect(() => {
     loadRelationships()
     loadMembers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId])
 
   if (loading) {

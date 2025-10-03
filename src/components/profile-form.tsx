@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -176,10 +177,11 @@ export function ProfileForm({ userId }: ProfileFormProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative w-32 h-32 rounded-full overflow-hidden bg-muted">
                 {avatarPreview ? (
-                  <img
+                  <Image
                     src={avatarPreview}
                     alt="Avatar preview"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-4xl">

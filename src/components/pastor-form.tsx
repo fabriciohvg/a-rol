@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -159,10 +160,11 @@ export function PastorForm({ pastor, onSuccess, onCancel }: PastorFormProps) {
             <div className="flex flex-col items-center gap-4">
               <div className="relative w-32 h-32 rounded-full overflow-hidden bg-muted">
                 {photoPreview ? (
-                  <img
+                  <Image
                     src={photoPreview}
                     alt="Pastor photo"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-4xl">

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -122,13 +123,16 @@ export function ChurchesList({ onEdit, onNew }: ChurchesListProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
                     {church.photo_url ? (
-                      <img
-                        src={supabase.storage
-                          .from('church-photos')
-                          .getPublicUrl(church.photo_url).data.publicUrl}
-                        alt={church.name}
-                        className="w-20 h-20 rounded-lg object-cover"
-                      />
+                      <div className="relative w-20 h-20 rounded-lg overflow-hidden">
+                        <Image
+                          src={supabase.storage
+                            .from('church-photos')
+                            .getPublicUrl(church.photo_url).data.publicUrl}
+                          alt={church.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     ) : (
                       <div className="w-20 h-20 rounded-lg bg-muted flex items-center justify-center text-2xl">
                         {church.name.charAt(0).toUpperCase()}

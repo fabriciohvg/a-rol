@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/client'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -244,13 +245,16 @@ export function MemberFamilyRelationships({ memberId, memberName }: MemberFamily
                 >
                   <div className="flex items-center gap-3">
                     {rel.related_member?.photo_url ? (
-                      <img
-                        src={supabase.storage
-                          .from('member-photos')
-                          .getPublicUrl(rel.related_member.photo_url).data.publicUrl}
-                        alt={rel.related_member?.name || 'Member'}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                        <Image
+                          src={supabase.storage
+                            .from('member-photos')
+                            .getPublicUrl(rel.related_member.photo_url).data.publicUrl}
+                          alt={rel.related_member?.name || 'Member'}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-sm">
                         {rel.related_member?.name?.charAt(0)?.toUpperCase() || '?'}

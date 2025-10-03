@@ -10,7 +10,7 @@ export interface Profile {
 
 export type OfficeRole = 'Pastor'
 export type Presbytery = 'PANA' | 'PNAN'
-export type ChurchType = 'Church'
+export type ChurchType = 'Church' | 'Congregation' | 'Presbyterial Congregation' | 'Preaching Point'
 
 export interface Pastor {
   id: string
@@ -50,6 +50,7 @@ export interface Church {
   id: string
   photo_url: string | null
   type: ChurchType
+  parent_church_id: string | null
   name: string
   address: string
   neighborhood: string

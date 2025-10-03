@@ -82,6 +82,7 @@ export function ChurchesList({ onEdit, onNew }: ChurchesListProps) {
 
   useEffect(() => {
     loadChurches()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (loading) {

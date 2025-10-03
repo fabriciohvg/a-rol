@@ -30,6 +30,7 @@ export function ProfileForm({ userId }: ProfileFormProps) {
 
   useEffect(() => {
     loadProfile()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   async function loadProfile() {

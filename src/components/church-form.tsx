@@ -63,6 +63,7 @@ export function ChurchForm({ church, onSuccess, onCancel }: ChurchFormProps) {
       }
     }
     loadPastors()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {

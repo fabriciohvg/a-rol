@@ -80,6 +80,7 @@ export function MembersList({ onEdit, onNew }: MembersListProps) {
 
   useEffect(() => {
     loadMembers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Filter members by search term
